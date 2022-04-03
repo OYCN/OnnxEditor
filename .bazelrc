@@ -1,0 +1,3 @@
+# build --config=local
+
+# build --flag_alias=rcc_path=//:rcc_path
