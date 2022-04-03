@@ -2,7 +2,7 @@
 #define GRAPHVIEW_H
 
 #include <QtWidgets/QGraphicsView>
-#include "graphscene.h"
+#include "graph/graphscene.h"
 #include <QtWidgets/QMenu>
 
 enum class MouseStatus {

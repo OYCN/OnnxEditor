@@ -1,5 +1,3 @@
-# # BUILD
-
 load("@com_justbuchanan_rules_qt//:qt.bzl", "qt_cc_library", "qt_resource")
 
 qt_resource(
@@ -14,6 +12,9 @@ qt_cc_library(
     srcs = glob([
             "*.cpp",
         ],
+        exclude = [
+            "main.cpp"
+        ]
     ),
     hdrs = glob([
             "*.h",
@@ -24,6 +25,7 @@ qt_cc_library(
         "@qt//:qt_widgets",
         "@qt//:qt_gui",
         ":qrc",
+        "//graph:graph",
         ],
 )
 

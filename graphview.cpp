@@ -5,7 +5,7 @@
 #include <QtWidgets/QGraphicsItem>
 #include <QtWidgets/QMessageBox>
 #include <QtCore/QDebug>
-#include "context.h"
+#include "graph/context.h"
 
 GraphView::GraphView(QWidget *parent)
     : QGraphicsView{parent}
