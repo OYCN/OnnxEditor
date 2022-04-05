@@ -1,0 +1,25 @@
+name: qt5-release
+
+on: push
+
+env:
+  DEBIAN_FRONTEND: noninteractive
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: init-docker
+      run: docker build -t local -f .docker/qt5.DockerFile .
+    - name: compile
+      run: |
+        docker run -v ${PWD}:/code -w /code local bash -c "bazelisk build //:main && cp bazel-bin/main main && chmod 755 main"
+    - name: release
+      uses: actions/upload-artifact@v2
+      with:
+        name: OnnxEditor
+        path: ./main
+        retention-days: 1
