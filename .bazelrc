@@ -1,3 +1,1 @@
-# build --config=local
-
-# build --flag_alias=rcc_path=//:rcc_path
+build --cxxopt=-std=c++17

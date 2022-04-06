@@ -29,6 +29,25 @@ qt_cc_library(
         ],
 )
 
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+
+cmake(
+   name = "ogdf",
+   lib_source = "@ogdf//:all",
+   generate_args = [
+       "-G Ninja",
+   ],
+   out_lib_dir = "lib/" + select({
+       "@platforms//cpu:arm": "aarch64-linux-gnu",
+       "@platforms//cpu:x86_64": "x86_64-linux-gnu",
+   }),
+   out_static_libs = [
+       "libCOIN.a",
+       "libOGDF.a",
+   ],
+   visibility = ["//visibility:public"]
+)
+
 cc_binary(
     name = "main",
     srcs = ["main.cpp"],

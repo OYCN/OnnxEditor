@@ -45,3 +45,27 @@ new_git_repository(
     commit = "cf6dfad9a770e4d6412ea88f1833c8e0118e163d",
     build_file = "//:onnx.BUILD",
 )
+
+git_repository(
+    name = "rules_foreign_cc",
+    remote = "https://github.com/bazelbuild/rules_foreign_cc.git",
+    commit = "9fc3411bb506de1e0d1fa91db0dbf7712d1028ae",
+)
+
+load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
+rules_foreign_cc_dependencies()
+
+_ALL_CONTENT = """\
+filegroup(
+    name = "all",
+    srcs = glob(["**"]),
+    visibility = ["//visibility:public"],
+)
+"""
+
+new_git_repository(
+    name = "ogdf",
+    remote = "https://github.com/ogdf/ogdf.git",
+    commit = "7596a518d2b8a964523c2bbd86af360aa405c6cf",
+    build_file_content = _ALL_CONTENT,
+)
