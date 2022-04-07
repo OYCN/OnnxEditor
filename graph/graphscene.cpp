@@ -18,17 +18,11 @@
 #include <QtGui/QCursor>
 #include <map>
 
+#include "../layout/layout.hpp"
 #include "graphedge.hpp"
 #include "graphnode.hpp"
 
-#include "../layout/layout.hpp"
-
-GraphScene::GraphScene(QObject* parent) : QGraphicsScene{parent} {
-  auto A = addNode("AAAA");
-  auto B = addNode("B");
-  auto AB = addEdge(A, B, "A to B");
-  layout();
-}
+GraphScene::GraphScene(QObject* parent) : QGraphicsScene{parent} {}
 
 GraphNode* GraphScene::addNode(QString name) {
   qDebug() << "add node" << name;
@@ -44,7 +38,8 @@ GraphNode* GraphScene::addNode(QPointF pos, QString name) {
   return node;
 }
 
-GraphEdge* GraphScene::addEdge(GraphNode* start, GraphNode* stop, QString name) {
+GraphEdge* GraphScene::addEdge(GraphNode* start, GraphNode* stop,
+                               QString name) {
   qDebug() << "add edge," << start->getName() << " -> " << stop->getName();
   GraphEdge* edge = new GraphEdge(mCtx, start, stop, name);
   this->addItem(edge);

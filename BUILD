@@ -26,6 +26,7 @@ qt_cc_library(
         "@qt//:qt_gui",
         ":qrc",
         "//graph:graph",
+        "//parser:parser",
         ],
 )
 

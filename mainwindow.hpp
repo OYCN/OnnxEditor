@@ -17,11 +17,20 @@
 
 #include <QtWidgets/QMainWindow>
 
+#include "logger.hpp"
+#include "graph/graphscene.hpp"
+
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
  public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
+  bool applyByParser();
+
+ private:
+  Logger mLogger;
+  parser::Parser mParser;
+  GraphScene* mScene = nullptr;
 };
 #endif  // MAINWINDOW_HPP_

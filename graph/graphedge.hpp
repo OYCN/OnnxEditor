@@ -34,8 +34,8 @@ class GraphEdge : public QGraphicsItem {
   void paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
              QWidget* widget = 0);
 
-  GraphNode* getFrom() const { return mFrom; };
-  GraphNode* getTo() const { return mTo; };
+  GraphNode* getFrom() const { return mFrom; }
+  GraphNode* getTo() const { return mTo; }
 
  private:
   Context& mCtx;

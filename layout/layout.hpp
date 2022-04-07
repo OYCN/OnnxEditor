@@ -12,8 +12,8 @@
  * </table>
  */
 
-#ifndef LAYOUT_COMMON_HPP_
-#define LAYOUT_COMMON_HPP_
+#ifndef LAYOUT_LAYOUT_HPP_
+#define LAYOUT_LAYOUT_HPP_
 
 #include <any>
 #include <map>
@@ -65,4 +65,4 @@ std::unique_ptr<Layout> getLayoutEngine(LayoutEngine type);
 
 }  // namespace layout
 
-#endif  // LAYOUT_COMMON_HPP_
+#endif  // LAYOUT_LAYOUT_HPP_

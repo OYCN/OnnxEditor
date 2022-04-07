@@ -31,6 +31,7 @@ class GraphView : public QGraphicsView {
  public:
   void expand(qreal f);
   void center();
+  GraphScene* getScene() const { return mScene; }
 
  private:
   void addMenu();

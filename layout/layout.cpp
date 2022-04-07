@@ -30,8 +30,8 @@ Node_t* Layout::addNode(double w, double h) {
 }
 
 Edge_t* Layout::addEdge(Node_t* from, Node_t* to) {
-  assert (from != nullptr);
-  assert (to != nullptr);
+  assert(from != nullptr);
+  assert(to != nullptr);
   Edge_t e;
   e.mFrom = from;
   e.mTo = to;
