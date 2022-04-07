@@ -15,7 +15,6 @@
 #ifndef PARSER_PARSER_HPP_
 #define PARSER_PARSER_HPP_
 
-#include <assert.h>
 #include <utility>
 #include <sstream>
 #include <string>

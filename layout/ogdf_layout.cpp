@@ -1,6 +1,3 @@
-#include "ogdf_layout.hpp"
-
-#include <ogdf/layered/FastHierarchyLayout.h>
 /**
  * @file ogdf_layout.cpp
  * @brief 
@@ -15,6 +12,9 @@
  * </table>
  */
 
+#include "ogdf_layout.hpp"
+
+#include <ogdf/layered/FastHierarchyLayout.h>
 #include <ogdf/layered/SugiyamaLayout.h>
 
 namespace layout {

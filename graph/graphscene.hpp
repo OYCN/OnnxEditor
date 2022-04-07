@@ -28,8 +28,9 @@ class GraphScene : public QGraphicsScene {
  public:
   explicit GraphScene(QObject* parent = nullptr);
 
-  void addNode(QPointF pos, QString name);
-  void addEdge(GraphNode* start, GraphNode* stop, QString name);
+  GraphNode* addNode(QString name);
+  GraphNode* addNode(QPointF pos, QString name);
+  GraphEdge* addEdge(GraphNode* start, GraphNode* stop, QString name);
 
   void layout();
 

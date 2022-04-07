@@ -32,6 +32,9 @@ class GraphView : public QGraphicsView {
   void expand(qreal f);
   void center();
 
+ private:
+  void addMenu();
+
  protected:
   void wheelEvent(QWheelEvent* event) override;
   void mousePressEvent(QMouseEvent* event) override;

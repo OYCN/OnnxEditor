@@ -13,6 +13,7 @@
  */
 
 #include <utility>
+#include <cassert>
 
 #include "layout.hpp"
 
@@ -21,12 +22,20 @@
 namespace layout {
 
 Node_t* Layout::addNode(double w, double h) {
-  mNodes.emplace_back(w, h);
+  Node_t n;
+  n.mW = w;
+  n.mH = h;
+  mNodes.emplace_back(n);
   return addNodeImpl(&mNodes.back());
 }
 
 Edge_t* Layout::addEdge(Node_t* from, Node_t* to) {
-  mEdges.emplace_back(from, to);
+  assert (from != nullptr);
+  assert (to != nullptr);
+  Edge_t e;
+  e.mFrom = from;
+  e.mTo = to;
+  mEdges.emplace_back(e);
   return addEdgeImpl(&mEdges.back());
 }
 

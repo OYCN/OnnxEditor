@@ -19,12 +19,11 @@
 #include <map>
 #include <memory>
 #include <string>
-#include <vector>
+#include <list>
 
 namespace layout {
 
 struct Node_t {
-  Node_t(double w, double h) : mW(w), mH(h) {}
   double mW = 0;
   double mH = 0;
   double mX = 0;
@@ -34,7 +33,6 @@ struct Node_t {
 };
 
 struct Edge_t {
-  Edge_t(Node_t* f, Node_t* t) : mFrom(f), mTo(t) {}
   Node_t* mFrom = nullptr;
   Node_t* mTo = nullptr;
   std::any mHandle;
@@ -59,8 +57,8 @@ class Layout {
   virtual void layoutImpl();
 
  protected:
-  std::vector<Node_t> mNodes;
-  std::vector<Edge_t> mEdges;
+  std::list<Node_t> mNodes;
+  std::list<Edge_t> mEdges;
 };
 
 std::unique_ptr<Layout> getLayoutEngine(LayoutEngine type);

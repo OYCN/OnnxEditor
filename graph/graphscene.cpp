@@ -24,68 +24,62 @@
 #include "../layout/layout.hpp"
 
 GraphScene::GraphScene(QObject* parent) : QGraphicsScene{parent} {
-  GraphNode* A = new GraphNode(mCtx, "AAAAA");
-  A->setPos(0, 0);
-  this->addItem(A);
-  //    GraphNode* B = new GraphNode(mCtx, "BBB");
-  //    B->setPos(80, 0);
-  //    this->addItem(B);
-  GraphNode* C = new GraphNode(mCtx, "C");
-  C->setPos(0, 30);
-  this->addItem(C);
-  //    GraphNode* D = new GraphNode(mCtx, ".");
-  //    D->setPos(80, 30);
-  //    this->addItem(D);
-
-  //    GraphEdge* AB = new GraphEdge(mCtx, A, B, "A to B");
-  //    this->addItem(AB);
-  //    GraphEdge* BC = new GraphEdge(mCtx, B, C, "B to C");
-  //    this->addItem(BC);
-  //    GraphEdge* CD = new GraphEdge(mCtx, C, D, "C to D");
-  //    this->addItem(CD);
-  //    GraphEdge* DA = new GraphEdge(mCtx, D, A, "D to A");
-  //    this->addItem(DA);
-  GraphEdge* AC = new GraphEdge(mCtx, A, C, "A to C");
-  this->addItem(AC);
+  auto A = addNode("AAAA");
+  auto B = addNode("B");
+  auto AB = addEdge(A, B, "A to B");
+  layout();
 }
 
-void GraphScene::addNode(QPointF pos, QString name) {
-  qDebug() << "add node" << pos << " Name:" << name;
+GraphNode* GraphScene::addNode(QString name) {
+  qDebug() << "add node" << name;
   GraphNode* node = new GraphNode(mCtx, name);
-  node->setPos(pos);
   this->addItem(node);
   mNodes.push_back(node);
+  return node;
 }
 
-void GraphScene::addEdge(GraphNode* start, GraphNode* stop, QString name) {
+GraphNode* GraphScene::addNode(QPointF pos, QString name) {
+  auto node = addNode(name);
+  node->setPos(pos);
+  return node;
+}
+
+GraphEdge* GraphScene::addEdge(GraphNode* start, GraphNode* stop, QString name) {
   qDebug() << "add edge," << start->getName() << " -> " << stop->getName();
   GraphEdge* edge = new GraphEdge(mCtx, start, stop, name);
   this->addItem(edge);
   mEdges.push_back(edge);
+  return edge;
 }
 
 void GraphScene::layout() {
-  qDebug() << "Layout";
   auto le = layout::getLayoutEngine(layout::kOGDF);
+  // auto le = layout::getLayoutEngine(layout::kNone);
   std::map<GraphNode*, layout::Node_t*> node_map;
   std::vector<layout::Node_t*> nodes;
   for (const auto& node : mNodes) {
     auto rect = node->boundingRect();
+    // qDebug() << node->getName() << rect;
     auto n = le->addNode(rect.width(), rect.height());
-    n->mData["item"] = node;
-    node_map[node] = n;
+    Q_ASSERT(node_map.count(node) == 0);
+    node_map.insert(std::make_pair(node, n));
     nodes.push_back(n);
   }
   for (const auto& edge : mEdges) {
     auto node1 = edge->getFrom();
     auto node2 = edge->getTo();
-    auto n1 = node_map[node1];
-    auto n2 = node_map[node2];
-    auto e = le->addEdge(n1, n2);
+    auto n1 = node_map.at(node1);
+    auto n2 = node_map.at(node2);
   }
   le->layout();
-  for (const auto& n : nodes) {
-    auto node = std::any_cast<GraphNode*>(n->mData.at("item"));
+  for (const auto& item : node_map) {
+    auto node = item.first;
+    auto n = item.second;
+    // qDebug() << node->getName() << "x:" << n->mX << "y" << n->mY;
     node->setPos(n->mX, n->mY);
   }
+  for (const auto& item : mEdges) {
+    item->updateAll();
+  }
+  this->update();
 }

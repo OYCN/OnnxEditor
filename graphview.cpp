@@ -1,10 +1,10 @@
 /**
  * @file graphview.cpp
- * @brief 
+ * @brief
  * @author oPluss (opluss@qq.com)
- * 
+ *
  * @copyright Copyright (c) 2022  oPluss
- * 
+ *
  * @par Modify log:
  * <table>
  * <tr><th>Date       <th>Version <th>Author  <th>Description
@@ -33,7 +33,10 @@ GraphView::GraphView(QWidget *parent) : QGraphicsView{parent} {
 
   mScene = new GraphScene(this);
   this->setScene(mScene);
+  addMenu();
+}
 
+void GraphView::addMenu() {
   mMenu = new QMenu(this);
   mAddNodeAction = new QAction("Add Node", this);
   connect(mAddNodeAction, &QAction::triggered, this, [&]() {
@@ -88,11 +91,15 @@ GraphView::GraphView(QWidget *parent) : QGraphicsView{parent} {
       }
     }
 #else
-        mSelected.removeIf([&](QGraphicsItem* i) {
-            return items.count(i) == 0;
-        });
+    mSelected.removeIf([&](QGraphicsItem* i) {
+        return items.count(i) == 0;
+    });
 #endif
   });
+
+  auto layoutAction = new QAction("Layout", this);
+  connect(layoutAction, &QAction::triggered, this, [&]() {mScene->layout();});
+  mMenu->addAction(layoutAction);
 }
 
 void GraphView::wheelEvent(QWheelEvent *event) {

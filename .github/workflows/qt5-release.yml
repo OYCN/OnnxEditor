@@ -16,7 +16,7 @@ jobs:
       run: docker build -t local -f .docker/qt5.DockerFile .
     - name: compile
       run: |
-        docker run -v ${PWD}:/code -w /code local bash -c "bazelisk build //:main && cp bazel-bin/main main && chmod 755 main"
+        docker run -v ${PWD}:/code -w /code local bash -c "bazelisk build --config release //:main && cp bazel-bin/main main && chmod 755 main"
     - name: release
       uses: actions/upload-artifact@v2
       with:
