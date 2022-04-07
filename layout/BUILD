@@ -4,7 +4,7 @@ cc_library(
         "*.cpp"
     ]),
     hdrs = glob([
-        "*.h"
+        "*.hpp"
     ]),
     deps = [
         "//:ogdf"

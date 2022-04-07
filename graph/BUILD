@@ -7,7 +7,7 @@ qt_cc_library(
         ],
     ),
     hdrs = glob([
-            "*.h",
+            "*.hpp",
         ],
     ),
     deps = [
