@@ -65,6 +65,7 @@ void GraphScene::layout() {
     auto node2 = edge->getTo();
     auto n1 = node_map.at(node1);
     auto n2 = node_map.at(node2);
+    le->addEdge(n1, n2);
   }
   le->layout();
   for (const auto& item : node_map) {

@@ -3,3 +3,10 @@
 
 # for bazel
 bazel-*
+
+# for debug
+*.gml
+*.svg
+
+# for test
+test
