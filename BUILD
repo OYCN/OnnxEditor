@@ -45,12 +45,14 @@ cmake(
        "libCOIN.a",
        "libOGDF.a",
    ],
+   alwayslink = True,
    visibility = ["//visibility:public"]
 )
 
 cc_binary(
     name = "main",
     srcs = ["main.cpp"],
+    linkstatic = True,
     deps = [
         ":widget"
     ]

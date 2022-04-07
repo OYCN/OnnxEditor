@@ -14,6 +14,7 @@ qt_cc_library(
         "@qt//:qt_core",
         "@qt//:qt_widgets",
         "@qt//:qt_gui",
+        "//layout:layout",
         ],
     visibility = ["//visibility:public"],
 )

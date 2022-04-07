@@ -21,6 +21,7 @@
 #include "context.hpp"
 
 class GraphNode;
+class GraphEdge;
 
 class GraphScene : public QGraphicsScene {
   Q_OBJECT

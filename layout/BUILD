@@ -6,6 +6,9 @@ cc_library(
     hdrs = glob([
         "*.hpp"
     ]),
+    linkopts = [
+        "-lpthread"
+    ],
     deps = [
         "//:ogdf"
     ],
