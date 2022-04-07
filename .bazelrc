@@ -1,1 +1,4 @@
 build --cxxopt=-std=c++17
+
+build:release --copt=-DNDEBUG --copt=-O3 --copt=-DEIGEN_NO_CUDA --linkopt=-lm
+build:debug --copt=-g --compilation_mode=dbg --copt=-fno-omit-frame-pointer --strip=never
