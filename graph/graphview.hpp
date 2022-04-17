@@ -18,7 +18,7 @@
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QMenu>
 
-#include "graph/graphscene.hpp"
+#include "graphscene.hpp"
 
 enum class MouseStatus { kNone, kPress, kDrag };
 

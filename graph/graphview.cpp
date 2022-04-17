@@ -21,7 +21,7 @@
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QScrollBar>
 
-#include "graph/context.hpp"
+#include "context.hpp"
 
 GraphView::GraphView(QWidget *parent) : QGraphicsView{parent} {
   setRenderHint(QPainter::Antialiasing, true);

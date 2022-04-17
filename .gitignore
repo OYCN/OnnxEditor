@@ -4,6 +4,9 @@
 # for bazel
 bazel-*
 
+#for cmake
+build
+
 # for debug
 *.gml
 *.svg
