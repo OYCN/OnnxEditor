@@ -1,10 +1,10 @@
 /**
  * @file graphnode.hpp
- * @brief 
+ * @brief
  * @author oPluss (opluss@qq.com)
- * 
+ *
  * @copyright Copyright (c) 2022  oPluss
- * 
+ *
  * @par Modify log:
  * <table>
  * <tr><th>Date       <th>Version <th>Author  <th>Description
@@ -15,8 +15,8 @@
 #ifndef GRAPH_GRAPHNODE_HPP_
 #define GRAPH_GRAPHNODE_HPP_
 
-#include <QtWidgets/QGraphicsItem>
 #include <QtCore/QMap>
+#include <QtWidgets/QGraphicsItem>
 
 #include "context.hpp"
 
@@ -30,7 +30,7 @@ class GraphNode : public QGraphicsItem {
 
   void updateAll();
 
-public:
+ public:
   QString getName() const { return mName; }
   void setName(QString name) { mName = name; }
 
@@ -38,7 +38,7 @@ public:
   QString getAttr(QString key) const { return mAttrs.value(key); }
   void setAttr(QString key, QString value) { mAttrs[key] = value; }
 
-protected:
+ protected:
   void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
   void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 

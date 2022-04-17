@@ -16,7 +16,7 @@
 
 #include <QtWidgets/QFileDialog>
 
-#include "graphview.hpp"
+#include "graph/graphview.hpp"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), mLogger(this), mParser(&mLogger) {

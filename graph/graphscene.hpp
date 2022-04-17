@@ -26,7 +26,7 @@ class GraphEdge;
 class GraphScene : public QGraphicsScene {
   Q_OBJECT
  public:
-  explicit GraphScene(QObject* parent = nullptr);
+  explicit GraphScene(Context &ctx, QObject* parent = nullptr);
 
   GraphNode* addNode(QString name);
   GraphNode* addNode(QPointF pos, QString name);
@@ -39,7 +39,7 @@ class GraphScene : public QGraphicsScene {
   void layout();
 
  private:
-  Context mCtx;
+  Context& mCtx;
   QList<GraphNode*> mNodes;
   QList<GraphEdge*> mEdges;
   QMap<GraphNode*, QList<GraphEdge*>> mNode2Edges;

@@ -36,6 +36,9 @@ class Context {
   QFont mEdgeNormalFont;
   QFont mEdgeSelectedFont;
 
+  // for view
+  QColor mViewBackgroundColor = {53, 53, 53};
+
   // for node
   qreal mNodePadWL = 5;
   qreal mNodePadWR = 5;

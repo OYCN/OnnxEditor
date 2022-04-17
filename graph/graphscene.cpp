@@ -22,7 +22,8 @@
 #include "graphedge.hpp"
 #include "graphnode.hpp"
 
-GraphScene::GraphScene(QObject* parent) : QGraphicsScene{parent} {}
+GraphScene::GraphScene(Context& ctx, QObject* parent)
+    : mCtx(ctx), QGraphicsScene{parent} {}
 
 GraphNode* GraphScene::addNode(QString name) {
   qDebug() << "add node" << name;
@@ -82,7 +83,8 @@ void GraphScene::delEdge(GraphEdge* edge) {
 }
 
 void GraphScene::setNodeAttr(GraphNode* node, QString key, QString value) {
-  qDebug() << "add node attr," << node->getName() << ": " << key << "=" << value;
+  qDebug() << "add node attr," << node->getName() << ": " << key << "="
+           << value;
   node->setAttr(key, value);
   node->updateAll();
   Q_ASSERT(mNode2Edges.count(node) == 1);

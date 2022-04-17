@@ -24,15 +24,16 @@
 #include "graph/context.hpp"
 
 GraphView::GraphView(QWidget *parent) : QGraphicsView{parent} {
-  this->setRenderHint(QPainter::Antialiasing, true);
-  this->setMouseTracking(true);
+  setRenderHint(QPainter::Antialiasing, true);
+  setMouseTracking(true);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setBackgroundBrush(mCtx.mViewBackgroundColor);
   // this->setBackgroundBrush(QBrush(QPixmap(":/res/grid100_w4_28o.png")));
-  this->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+  setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-  mScene = new GraphScene(this);
-  this->setScene(mScene);
+  mScene = new GraphScene(mCtx, this);
+  setScene(mScene);
   addMenu();
 }
 
@@ -74,17 +75,18 @@ void GraphView::addMenu() {
     auto pos = this->mapToScene(this->mapFromGlobal(QCursor::pos()));
     bool isOK;
     QString key = QInputDialog::getText(NULL, "Add Key of Node Attr",
-                                         "Please input the key of new node attr",
-                                         QLineEdit::Normal, "", &isOK);
+                                        "Please input the key of new node attr",
+                                        QLineEdit::Normal, "", &isOK);
     if (!isOK || key.size() == 0) {
       QMessageBox(QMessageBox::Warning, "Warning", "The input is empty",
                   QMessageBox::Ok, this)
           .exec();
       return;
     }
-    QString value = QInputDialog::getText(NULL, "Add Value of Node Attr",
-                                         "Please input the value of new node attr",
-                                         QLineEdit::Normal, "", &isOK);
+    QString value =
+        QInputDialog::getText(NULL, "Add Value of Node Attr",
+                              "Please input the value of new node attr",
+                              QLineEdit::Normal, "", &isOK);
     if (!isOK) {
       QMessageBox(QMessageBox::Warning, "Warning", "Got some error",
                   QMessageBox::Ok, this)
@@ -117,7 +119,7 @@ void GraphView::addMenu() {
   });
 
   auto layoutAction = new QAction("Layout", this);
-  connect(layoutAction, &QAction::triggered, this, [&]() {mScene->layout();});
+  connect(layoutAction, &QAction::triggered, this, [&]() { mScene->layout(); });
   mMenu->addAction(layoutAction);
 }
 
@@ -208,9 +210,9 @@ void GraphView::keyPressEvent(QKeyEvent *ev) {
     for (auto &i : items) {
       auto type = i->data(kItemDataKeyType).toInt();
       if (type == kItemTypeNode) {
-        mScene->delNode(reinterpret_cast<GraphNode*>(i));
+        mScene->delNode(reinterpret_cast<GraphNode *>(i));
       } else if (type == kItemTypeEdge) {
-        mScene->delEdge(reinterpret_cast<GraphEdge*>(i));
+        mScene->delEdge(reinterpret_cast<GraphEdge *>(i));
       } else {
         qCritical() << "Unknow value of kItemDataKeyType:" << type;
       }

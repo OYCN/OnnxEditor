@@ -12,8 +12,8 @@
  * </table>
  */
 
-#ifndef GRAPHVIEW_HPP_
-#define GRAPHVIEW_HPP_
+#ifndef GRAPH_GRAPHVIEW_HPP_
+#define GRAPH_GRAPHVIEW_HPP_
 
 #include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QMenu>
@@ -44,6 +44,8 @@ class GraphView : public QGraphicsView {
   void keyPressEvent(QKeyEvent* ev) override;
 
  private:
+  Context mCtx;
+
   MouseStatus mMouseStatus = MouseStatus::kNone;
   QPoint mStartPos;
   qreal mZoom = 1;
@@ -56,4 +58,4 @@ class GraphView : public QGraphicsView {
   QList<QGraphicsItem*> mSelected;
 };
 
-#endif  // GRAPHVIEW_HPP_
+#endif  // GRAPH_GRAPHVIEW_HPP_
