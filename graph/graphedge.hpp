@@ -39,8 +39,17 @@ class GraphEdge : public QGraphicsItem {
   void setFrom(GraphNode* node) { mFrom = node; }
   void setTo(GraphNode* node) { mTo = node; }
 
+protected:
+  void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+  void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
+
+private:
+ void computePath();
+
  private:
   Context& mCtx;
+
+  bool mHovered = false;
 
   QString mName;
 
@@ -53,7 +62,6 @@ class GraphEdge : public QGraphicsItem {
 
   QPainterPath mPath;
   QRectF mNameRect;
-  QPolygonF mArrow;
 };
 
 #endif  // GRAPH_GRAPHEDGE_HPP_

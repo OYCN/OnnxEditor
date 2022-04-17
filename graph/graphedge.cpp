@@ -23,31 +23,33 @@ GraphEdge::GraphEdge(Context& ctx, GraphNode* from, GraphNode* to, QString name)
     : mCtx(ctx), mName(name), mFrom(from), mTo(to) {
   setData(kItemDataKeyType, kItemTypeEdge);
   setFlag(QGraphicsItem::ItemIsSelectable, true);
+  setAcceptHoverEvents(true);
   updateAll();
 }
 
 QRectF GraphEdge::boundingRect() const {
-  return mPath.boundingRect() | mNameRect | mArrow.boundingRect();
+  return shape().boundingRect();
 }
 
 QPainterPath GraphEdge::shape() const {
   QPainterPathStroker ps;
-  QPen* pen;
+  QPen pen;
 
-  if (isSelected()) {
-    pen = &mCtx.mEdgeSelectedPen;
+  if (mHovered || isSelected()) {
+    pen.setWidth(2 * mCtx.mEdgeLineWidth);
   } else {
-    pen = &mCtx.mEdgeNormalPen;
+    pen.setWidth(mCtx.mEdgeLineWidth);
   }
 
-  ps.setCapStyle(pen->capStyle());
-  ps.setWidth(pen->widthF() + 10);
-  ps.setJoinStyle(pen->joinStyle());
-  ps.setMiterLimit(pen->miterLimit());
+  ps.setCapStyle(pen.capStyle());
+  ps.setWidth(pen.widthF() + 10);
+  ps.setJoinStyle(pen.joinStyle());
+  ps.setMiterLimit(pen.miterLimit());
 
   QPainterPath p = ps.createStroke(mPath);
   p.addRect(mNameRect);
-  p.addPolygon(mArrow);
+  p.addEllipse(mStart, mCtx.mEdgeStartPointRadius, mCtx.mEdgeStartPointRadius);
+  p.addEllipse(mStop, mCtx.mEdgeStopPointRadius, mCtx.mEdgeStopPointRadius);
   return p;
 }
 
@@ -55,27 +57,69 @@ void GraphEdge::paint(QPainter* painter, const QStyleOptionGraphicsItem*,
                       QWidget*) {
   painter->save();
 
-  if (isSelected()) {
-    painter->setPen(mCtx.mEdgeSelectedPen);
-    painter->setBrush(mCtx.mEdgeLineSelectedBrush);
-    painter->setFont(mCtx.mEdgeSelectedFont);
-  } else {
-    painter->setPen(mCtx.mEdgeNormalPen);
-    painter->setBrush(mCtx.mEdgeLineNormalBrush);
-    painter->setFont(mCtx.mEdgeNormalFont);
+  // hovered or selected
+  if (mHovered || isSelected()) {
+    QPen p;
+    p.setWidth(2 * mCtx.mEdgeLineWidth);
+    p.setColor(isSelected()
+               ? mCtx.mEdgeSelectedHaloColor
+               : mCtx.mEdgeHoveredColor);
+    painter->setPen(p);
+    painter->setBrush(Qt::NoBrush);
+    painter->drawPath(mPath);
   }
 
-  painter->drawPath(mPath);
-  //    painter->drawText(mText, mName);
-  painter->drawText(mNameRect, Qt::AlignCenter, mName);
-  if (isSelected()) {
-    painter->setBrush(mCtx.mEdgeArrowSelectedBrush);
-  } else {
-    painter->setBrush(mCtx.mEdgeArrowNormalBrush);
+  // for normal
+  {
+    QPen p;
+    p.setWidth(mCtx.mEdgeLineWidth);
+    p.setColor(isSelected()
+               ? mCtx.mEdgeSelectedColor
+               : mCtx.mEdgeNormalColor);
+    painter->setPen(p);
+    painter->setBrush(Qt::NoBrush);
+    painter->drawPath(mPath);
   }
-  painter->drawPolygon(mArrow);
+
+  // Ellipse
+  painter->setPen(mCtx.mEdgeStartPointColor);
+  painter->setBrush(mCtx.mEdgeStartPointColor);
+  painter->drawEllipse(mStart, mCtx.mEdgeStartPointRadius, mCtx.mEdgeStartPointRadius);
+  painter->setPen(mCtx.mEdgeStopPointColor);
+  painter->setBrush(mCtx.mEdgeStopPointColor);
+  painter->drawEllipse(mStop, mCtx.mEdgeStopPointRadius, mCtx.mEdgeStopPointRadius);
+
+  // for name
+  {
+    QFont f(mCtx.mEdgeFont);
+    painter->setFont(f);
+    painter->setPen(mCtx.mEdgeFontColor);
+    painter->drawText(mNameRect, Qt::AlignCenter, mName);
+  }
 
   painter->restore();
+}
+
+void GraphEdge::computePath() {
+  mPath = QPainterPath(mStart);
+  const qreal defaultOffset = 200;
+  qreal xDistance = mStart.x() - mStop.x();
+  qreal horizontalOffset = qMin(defaultOffset, std::abs(xDistance));
+  qreal verticalOffset = 0;
+  qreal ratioX = 0.5;
+  if (xDistance <= 0) {
+    qreal yDistance = mStart.y() - mStop.y() + 20;
+    qreal vector = yDistance < 0 ? -1.0 : 1.0;
+    verticalOffset = qMin(defaultOffset, std::abs(yDistance)) * vector;
+    ratioX = 1.0;
+  }
+  horizontalOffset *= ratioX;
+  QPointF c1(mStop.x() + horizontalOffset,
+             mStop.y() + verticalOffset);
+
+  QPointF c2(mStart.x() - horizontalOffset,
+             mStart.y() - verticalOffset);
+  mPath.cubicTo(c1, c2, mStop);
 }
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
@@ -161,6 +205,7 @@ void GraphEdge::updateAll() {
   func(toRect, tc, mStop);
 
 // update path
+// computePath();
 #if QT_VERSION < QT_VERSION_CHECK(5, 13, 0)
   {  // QT5
     auto t = QPainterPath();
@@ -183,25 +228,22 @@ void GraphEdge::updateAll() {
   // update text pos
   QLineF l(mStart, mStop);
   mText = l.center();
-  QFont* font;
-  if (isSelected()) {
-    font = &mCtx.mEdgeSelectedFont;
-  } else {
-    font = &mCtx.mEdgeNormalFont;
-  }
 
-  QFontMetrics fm(*font);
+  QFontMetrics fm(QFont(mCtx.mEdgeFont));
   QRectF rect = fm.boundingRect(mName);
   mNameRect = QRectF(mText.x(), mText.y(), rect.width(), rect.height());
 
-  // update arrow
-  mArrow.clear();
-  QLineF t = QLineF(mStop, mStart);
-  t.setLength(3);
-  QLineF p = QLineF(t.p2(), t.p1()).normalVector();
-  QPointF dp = p.p2() - p.p1();
-  mArrow.append(mStop);
-  mArrow.append(p.p1() + dp);
-  mArrow.append(p.p1() - dp);
+  update();
+}
+
+void GraphEdge::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+  // qDebug() << "Enter hover";
+  mHovered = true;
+  update();
+}
+
+void GraphEdge::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+  // qDebug() << "Leave hover";
+  mHovered = false;
   update();
 }

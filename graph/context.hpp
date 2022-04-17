@@ -24,26 +24,14 @@ enum ItemType : int { kItemTypeNode, kItemTypeEdge };
 
 class Context {
  public:
-  Context();
-
- public:
-  QPen mEdgeNormalPen;
-  QPen mEdgeSelectedPen;
-  QBrush mEdgeLineNormalBrush;
-  QBrush mEdgeLineSelectedBrush;
-  QBrush mEdgeArrowNormalBrush;
-  QBrush mEdgeArrowSelectedBrush;
-  QFont mEdgeNormalFont;
-  QFont mEdgeSelectedFont;
-
   // for view
   QColor mViewBackgroundColor = {53, 53, 53};
 
   // for node
-  qreal mNodePadWL = 5;
-  qreal mNodePadWR = 5;
-  qreal mNodePadHT = 1;
-  qreal mNodePadHB = 1;
+  qreal mNodePadWL = 7;
+  qreal mNodePadWR = 7;
+  qreal mNodePadHT = 3;
+  qreal mNodePadHB = 3;
   qreal mNodePadNameAttrs = 1;
   qreal mNodePadAttrs = 0.5;
   QColor mNodeNormalBoundarColor = {255, 255, 255};
@@ -56,6 +44,19 @@ class Context {
   qreal mNodeHoveredPenWidth = 1.5;
   QString mNodeFont = "Monospace";
   QColor mNodeFontColor = "white";
+
+  // for edge
+  qreal mEdgeLineWidth = 3.0;
+  QColor mEdgeSelectedHaloColor = "orange";
+  QColor mEdgeHoveredColor = "lightcyan";
+  QColor mEdgeNormalColor = "darkcyan";
+  QColor mEdgeSelectedColor = {100, 100, 100};
+  qreal mEdgeStartPointRadius = 3;
+  QColor mEdgeStartPointColor = "gray";
+  qreal mEdgeStopPointRadius = 5;
+  QColor mEdgeStopPointColor = "gray";
+  QString mEdgeFont = "Monospace";
+  QColor mEdgeFontColor = "white";
 };
 
 #endif  // GRAPH_CONTEXT_HPP_
