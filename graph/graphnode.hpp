@@ -16,6 +16,7 @@
 #define GRAPH_GRAPHNODE_HPP_
 
 #include <QtWidgets/QGraphicsItem>
+#include <QtCore/QMap>
 
 #include "context.hpp"
 
@@ -27,11 +28,32 @@ class GraphNode : public QGraphicsItem {
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
              QWidget *widget = 0) override;
 
+  void updateAll();
+
+public:
   QString getName() const { return mName; }
+  void setName(QString name, bool update = true) { 
+    mName = name;
+    if (update) updateAll();
+  }
+
+  QMap<QString, QString> getAttrs() const { return mAttrs; }
+  QString getAttr(QString key) const { return mAttrs.value(key); }
+  void setAttr(QString key, QString value, bool update = true) {
+    mAttrs[key] = value;
+    if (update) updateAll();
+  }
 
  private:
   Context &mCtx;
+
   QString mName = "";
+  QMap<QString, QString> mAttrs;
+  QList<QString> mAttrsStr;
+
+  QRectF mAllRect;
+  QRectF mNameRect;
+  QRectF mFirstAttrRect;
 };
 
 #endif  // GRAPH_GRAPHNODE_HPP_

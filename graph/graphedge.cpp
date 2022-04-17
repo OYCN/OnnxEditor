@@ -200,4 +200,5 @@ void GraphEdge::updateAll() {
   mArrow.append(mStop);
   mArrow.append(p.p1() + dp);
   mArrow.append(p.p1() - dp);
+  update();
 }

@@ -30,7 +30,9 @@ class GraphScene : public QGraphicsScene {
 
   GraphNode* addNode(QString name);
   GraphNode* addNode(QPointF pos, QString name);
-  GraphEdge* addEdge(GraphNode* start, GraphNode* stop, QString name);
+  GraphEdge* addEdge(GraphNode* start, GraphNode* stop, QString name = "");
+
+  void setNodeAttr(GraphNode* node, QString key, QString value);
 
   void layout();
 

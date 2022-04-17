@@ -50,6 +50,7 @@ class GraphView : public QGraphicsView {
 
   GraphScene* mScene = nullptr;
   QAction* mAddNodeAction = nullptr;
+  QAction* mAddNodeAttrAction = nullptr;
   QAction* mAddEdgeAction = nullptr;
   QMenu* mMenu = nullptr;
   QList<QGraphicsItem*> mSelected;

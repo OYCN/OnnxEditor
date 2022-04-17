@@ -26,22 +26,35 @@ class Context {
   Context();
 
  public:
-  QPen mNodeNormalPen;
-  QPen mNodeSelectedPen;
+  QPen mNodeNormalNamePen;
+  QPen mNodeSelectedNamePen;
+  QPen mNodeNormalAttrsPen;
+  QPen mNodeSelectedAttrsPen;
   QPen mEdgeNormalPen;
   QPen mEdgeSelectedPen;
 
-  QBrush mNodeNormalBrush;
-  QBrush mNodeSelectedBrush;
+  QBrush mNodeNormalNameBrush;
+  QBrush mNodeSelectedNameBrush;
+  QBrush mNodeNormalAttrsBrush;
+  QBrush mNodeSelectedAttrsBrush;
   QBrush mEdgeLineNormalBrush;
   QBrush mEdgeLineSelectedBrush;
   QBrush mEdgeArrowNormalBrush;
   QBrush mEdgeArrowSelectedBrush;
 
-  QFont mNodeNormalFont;
-  QFont mNodeSelectedFont;
+  QFont mNodeNormalNameFont;
+  QFont mNodeSelectedNameFont;
+  QFont mNodeNormalAttrsFont;
+  QFont mNodeSelectedAttrsFont;
   QFont mEdgeNormalFont;
   QFont mEdgeSelectedFont;
+
+  qreal mNodePadWL = 5;
+  qreal mNodePadWR = 5;
+  qreal mNodePadHT = 1;
+  qreal mNodePadHB = 1;
+  qreal mNodePadNameAttrs = 1;
+  qreal mNodePadAttrs = 0.5;
 };
 
 #endif  // GRAPH_CONTEXT_HPP_

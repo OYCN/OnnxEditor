@@ -47,6 +47,11 @@ GraphEdge* GraphScene::addEdge(GraphNode* start, GraphNode* stop,
   return edge;
 }
 
+void GraphScene::setNodeAttr(GraphNode* node, QString key, QString value) {
+  qDebug() << "add node attr," << node->getName() << ": " << key << "=" << value;
+  node->setAttr(key, value);
+}
+
 void GraphScene::layout() {
   auto le = layout::getLayoutEngine(layout::kOGDF);
   // auto le = layout::getLayoutEngine(layout::kNone);
@@ -77,5 +82,5 @@ void GraphScene::layout() {
   for (const auto& item : mEdges) {
     item->updateAll();
   }
-  this->update();
+  update();
 }

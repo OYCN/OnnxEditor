@@ -28,7 +28,7 @@ GraphView::GraphView(QWidget *parent) : QGraphicsView{parent} {
   this->setMouseTracking(true);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  this->setBackgroundBrush(QBrush(QPixmap(":/res/grid100_w4_28o.png")));
+  // this->setBackgroundBrush(QBrush(QPixmap(":/res/grid100_w4_28o.png")));
   this->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
   mScene = new GraphScene(this);
@@ -38,6 +38,7 @@ GraphView::GraphView(QWidget *parent) : QGraphicsView{parent} {
 
 void GraphView::addMenu() {
   mMenu = new QMenu(this);
+
   mAddNodeAction = new QAction("Add Node", this);
   connect(mAddNodeAction, &QAction::triggered, this, [&]() {
     auto pos = this->mapToScene(this->mapFromGlobal(QCursor::pos()));
@@ -56,27 +57,45 @@ void GraphView::addMenu() {
     }
   });
   mMenu->addAction(mAddNodeAction);
+
   mAddEdgeAction = new QAction("Add Edge", this);
   connect(mAddEdgeAction, &QAction::triggered, this, [&]() {
     Q_ASSERT(mSelected.size() == 2);
-    bool isOK;
-    QString name = QInputDialog::getText(NULL, "Add Node",
-                                         "Please input the new node name",
-                                         QLineEdit::Normal, "", &isOK);
     GraphNode *from = reinterpret_cast<GraphNode *>(mSelected[0]);
     GraphNode *to = reinterpret_cast<GraphNode *>(mSelected[1]);
-    if (isOK) {
-      if (name.size() == 0) {
-        QMessageBox(QMessageBox::Warning, "Warning", "The name is empty",
-                    QMessageBox::Ok, this)
-            .exec();
-      } else {
-        mScene->addEdge(from, to, name);
-        mScene->clearSelection();
-      }
-    }
+    mScene->addEdge(from, to);
+    mScene->clearSelection();
   });
   mMenu->addAction(mAddEdgeAction);
+
+  mAddNodeAttrAction = new QAction("Add Node Attr", this);
+  connect(mAddNodeAttrAction, &QAction::triggered, this, [&]() {
+    Q_ASSERT(mSelected.size() == 1);
+    auto pos = this->mapToScene(this->mapFromGlobal(QCursor::pos()));
+    bool isOK;
+    QString key = QInputDialog::getText(NULL, "Add Key of Node Attr",
+                                         "Please input the key of new node attr",
+                                         QLineEdit::Normal, "", &isOK);
+    if (!isOK || key.size() == 0) {
+      QMessageBox(QMessageBox::Warning, "Warning", "The input is empty",
+                  QMessageBox::Ok, this)
+          .exec();
+      return;
+    }
+    QString value = QInputDialog::getText(NULL, "Add Value of Node Attr",
+                                         "Please input the value of new node attr",
+                                         QLineEdit::Normal, "", &isOK);
+    if (!isOK) {
+      QMessageBox(QMessageBox::Warning, "Warning", "Got some error",
+                  QMessageBox::Ok, this)
+          .exec();
+      return;
+    }
+    GraphNode *node = reinterpret_cast<GraphNode *>(mSelected[0]);
+    mScene->setNodeAttr(node, key, value);
+  });
+  mMenu->addAction(mAddNodeAttrAction);
+
   connect(mScene, &GraphScene::selectionChanged, this, [&]() {
     auto items = mScene->selectedItems();
     for (const auto &i : items) {
@@ -166,6 +185,11 @@ void GraphView::mouseReleaseEvent(QMouseEvent *event) {
       mAddNodeAction->setEnabled(true);
     } else {
       mAddNodeAction->setEnabled(false);
+    }
+    if (nodeNum == 1) {
+      mAddNodeAttrAction->setEnabled(true);
+    } else {
+      mAddNodeAttrAction->setEnabled(false);
     }
     if (nodeNum == 2) {
       mAddEdgeAction->setEnabled(true);
