@@ -218,12 +218,14 @@ void GraphEdge::updateAll() {
 
   // QPointF c1 = QPointF((mStart.x() + mStop.x()) / 2, mStart.y());
   // QPointF c2 = QPointF((mStart.x() + mStop.x()) / 2, mStop.y());
-  // mPath.cubicTo(c1, c2, mStop);
+  QPointF c1 = QPointF(mStart.x(), (mStart.y() + mStop.y()) / 2);
+  QPointF c2 = QPointF(mStop.x(), (mStart.y() + mStop.y()) / 2);
+  mPath.cubicTo(c1, c2, mStop);
 
   // QPointF c0 = QPointF((mStart.x() + mStop.x()) / 2, mStart.y());
   // mPath.quadTo(c0, mStop);
 
-  mPath.lineTo(mStop);
+  // mPath.lineTo(mStop);
 
   // update text pos
   QLineF l(mStart, mStop);
