@@ -66,7 +66,7 @@ bool MainWindow::applyByParser() {
     // register this
     if (map.contains(i.c_str())) {
       QMessageBox::critical(this, "Error",
-                            "Already has input with " + QString(i.c_str()));
+                            "The graph input already exist " + QString(i.c_str()));
       exit(0);
     }
     map[i.c_str()] = n;
@@ -74,19 +74,20 @@ bool MainWindow::applyByParser() {
   qDebug() << "Add Input Node Done";
 
   // For Initializers
-  qDebug() << "Add Initializers Node";
-  auto initializers = mParser.getInitializers();
-  for (auto i : initializers) {
-    auto n = mScene->addNode("Weight");
-    // register this
-    if (map.contains(i.c_str())) {
-      QMessageBox::critical(this, "Error",
-                            "Already has input with " + QString(i.c_str()));
-      exit(0);
-    }
-    map[i.c_str()] = n;
-  }
-  qDebug() << "Add Initializers Node Done";
+  qDebug() << "Skip Initializers Node";
+  // qDebug() << "Add Initializers Node";
+  // auto initializers = mParser.getInitializers();
+  // for (auto i : initializers) {
+  //   auto n = mScene->addNode("Weight");
+  //   // register this
+  //   if (map.contains(i.c_str())) {
+  //     QMessageBox::critical(this, "Error",
+  //                           "Already has input with " + QString(i.c_str()));
+  //     exit(0);
+  //   }
+  //   map[i.c_str()] = n;
+  // }
+  // qDebug() << "Add Initializers Node Done";
 
   // For Nodes
   qDebug() << "Add Op Node";
@@ -98,9 +99,12 @@ bool MainWindow::applyByParser() {
     // find inputs
     for (auto o : node.mInputs) {
       if (!map.contains(o.c_str())) {
-        QMessageBox::critical(this, "Error",
-                              "Con't find data with " + QString(o.c_str()));
-        exit(0);
+        // Because we skip the Initializers
+        qDebug() << "Can't find node inputs " << o.c_str();
+        continue;
+        // QMessageBox::critical(this, "Error",
+        //                       "Can't find data with " + QString(o.c_str()));
+        // exit(0);
       }
       auto t = map[o.c_str()];
       mScene->addEdge(t, n, "");
@@ -109,7 +113,7 @@ bool MainWindow::applyByParser() {
     for (auto o : node.mOutputs) {
       if (map.contains("Output")) {
         QMessageBox::critical(this, "Error",
-                              "Already has data with " + QString(o.c_str()));
+                              "The node output already in map " + QString(o.c_str()));
         exit(0);
       }
       map[o.c_str()] = n;
@@ -126,7 +130,7 @@ bool MainWindow::applyByParser() {
     // find inputs
     if (!map.contains(o.c_str())) {
       QMessageBox::critical(this, "Error",
-                            "Con't find data with " + QString(o.c_str()));
+                            "Can't find graph ouput: " + QString(o.c_str()));
       exit(0);
     }
     auto t = map[o.c_str()];
