@@ -22,4 +22,4 @@ jobs:
       with:
         name: OnnxEditor
         path: ./main
-        retention-days: 1
+        # retention-days: 1
