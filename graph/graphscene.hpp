@@ -16,7 +16,7 @@
 #define GRAPH_GRAPHSCENE_HPP_
 
 #include <QtWidgets/QGraphicsScene>
-#include <vector>
+#include <QtCore/QMap>
 
 #include "context.hpp"
 
@@ -31,6 +31,8 @@ class GraphScene : public QGraphicsScene {
   GraphNode* addNode(QString name);
   GraphNode* addNode(QPointF pos, QString name);
   GraphEdge* addEdge(GraphNode* start, GraphNode* stop, QString name = "");
+  void delNode(GraphNode* node);
+  void delEdge(GraphEdge* edge);
 
   void setNodeAttr(GraphNode* node, QString key, QString value);
 
@@ -38,8 +40,9 @@ class GraphScene : public QGraphicsScene {
 
  private:
   Context mCtx;
-  std::vector<GraphNode*> mNodes;
-  std::vector<GraphEdge*> mEdges;
+  QList<GraphNode*> mNodes;
+  QList<GraphEdge*> mEdges;
+  QMap<GraphNode*, QList<GraphEdge*>> mNode2Edges;
 };
 
 #endif  // GRAPH_GRAPHSCENE_HPP_

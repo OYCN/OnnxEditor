@@ -16,6 +16,7 @@
 #define GRAPH_CONTEXT_HPP_
 
 #include <QtGui/QPainter>
+#include <QtGui/QColor>
 
 enum ItemDataKey : int { kItemDataKeyType = 0 };
 
@@ -26,35 +27,32 @@ class Context {
   Context();
 
  public:
-  QPen mNodeNormalNamePen;
-  QPen mNodeSelectedNamePen;
-  QPen mNodeNormalAttrsPen;
-  QPen mNodeSelectedAttrsPen;
   QPen mEdgeNormalPen;
   QPen mEdgeSelectedPen;
-
-  QBrush mNodeNormalNameBrush;
-  QBrush mNodeSelectedNameBrush;
-  QBrush mNodeNormalAttrsBrush;
-  QBrush mNodeSelectedAttrsBrush;
   QBrush mEdgeLineNormalBrush;
   QBrush mEdgeLineSelectedBrush;
   QBrush mEdgeArrowNormalBrush;
   QBrush mEdgeArrowSelectedBrush;
-
-  QFont mNodeNormalNameFont;
-  QFont mNodeSelectedNameFont;
-  QFont mNodeNormalAttrsFont;
-  QFont mNodeSelectedAttrsFont;
   QFont mEdgeNormalFont;
   QFont mEdgeSelectedFont;
 
+  // for node
   qreal mNodePadWL = 5;
   qreal mNodePadWR = 5;
   qreal mNodePadHT = 1;
   qreal mNodePadHB = 1;
   qreal mNodePadNameAttrs = 1;
   qreal mNodePadAttrs = 0.5;
+  QColor mNodeNormalBoundarColor = {255, 255, 255};
+  QColor mNodeSelectedBoundarColor = {255, 165, 0};
+  QColor mNodeGradientColor0 = "gray";
+  QColor mNodeGradientColor1 = {80, 80, 80};
+  QColor mNodeGradientColor2 = {64, 64, 64};
+  QColor mNodeGradientColor3 = {58, 58, 58};
+  qreal mNodePenWidth = 1;
+  qreal mNodeHoveredPenWidth = 1.5;
+  QString mNodeFont = "Monospace";
+  QColor mNodeFontColor = "white";
 };
 
 #endif  // GRAPH_CONTEXT_HPP_

@@ -15,10 +15,12 @@
 #include "graphnode.hpp"
 
 #include <QtGui/QPainter>
+#include <QtCore/QDebug>
 
 GraphNode::GraphNode(Context &ctx, QString name) : mCtx(ctx), mName(name) {
   setData(kItemDataKeyType, kItemTypeNode);
   setFlag(QGraphicsItem::ItemIsSelectable, true);
+  setAcceptHoverEvents(true);
   updateAll();
 }
 
@@ -30,53 +32,55 @@ void GraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
                       QWidget *) {
   painter->save();
 
-  // for name
-  if (isSelected()) {
-    painter->setPen(mCtx.mNodeSelectedNamePen);
-    painter->setBrush(mCtx.mNodeSelectedNameBrush);
-    painter->setFont(mCtx.mNodeSelectedNameFont);
-  } else {
-    painter->setPen(mCtx.mNodeNormalNamePen);
-    painter->setBrush(mCtx.mNodeNormalNameBrush);
-    painter->setFont(mCtx.mNodeNormalNameFont);
-  }
-  
-  painter->drawRoundedRect(mAllRect, 3, 3);
-
-  painter->drawText(mNameRect, Qt::AlignCenter, mName);
-
-  // for name
-  if (isSelected()) {
-    painter->setPen(mCtx.mNodeSelectedAttrsPen);
-    painter->setBrush(mCtx.mNodeSelectedAttrsBrush);
-    painter->setFont(mCtx.mNodeSelectedAttrsFont);
-  } else {
-    painter->setPen(mCtx.mNodeNormalAttrsPen);
-    painter->setBrush(mCtx.mNodeNormalAttrsBrush);
-    painter->setFont(mCtx.mNodeNormalAttrsFont);
+  // for rect
+  {
+    auto color = isSelected()
+                ? mCtx.mNodeSelectedBoundarColor
+                : mCtx.mNodeNormalBoundarColor;
+    auto width = mHovered
+                ? mCtx.mNodeHoveredPenWidth
+                : mCtx.mNodePenWidth;
+    QPen p(color, width);
+    painter->setPen(p);
+    QLinearGradient gradient(QPointF(0.0, 0.0),
+                            QPointF(2.0, mAllRect.height()));
+    gradient.setColorAt(0.0, mCtx.mNodeGradientColor0);
+    gradient.setColorAt(0.03, mCtx.mNodeGradientColor1);
+    gradient.setColorAt(0.97, mCtx.mNodeGradientColor2);
+    gradient.setColorAt(1.0, mCtx.mNodeGradientColor3);
+    painter->setBrush(gradient);
+    painter->drawRoundedRect(mAllRect, 3, 3);
   }
 
-  QRectF this_attr_rect = mFirstAttrRect;
-  for (const auto& str : mAttrsStr) {
-    painter->drawText(this_attr_rect, Qt::AlignCenter, str);
-    this_attr_rect.translate(0, mCtx.mNodePadAttrs);
+  // for name
+  {
+    QFont f(mCtx.mNodeFont);
+    f.setBold(true);
+    painter->setFont(f);
+    painter->setPen(mCtx.mNodeFontColor);
+    painter->drawText(mNameRect, Qt::AlignCenter, mName);
+  }
+
+  // for attrs
+  {
+    QFont f(mCtx.mNodeFont);
+    painter->setFont(f);
+    painter->setPen(mCtx.mNodeFontColor);
+    QRectF this_attr_rect = mFirstAttrRect;
+    for (const auto& str : mAttrsStr) {
+      painter->drawText(this_attr_rect, Qt::AlignCenter, str);
+      this_attr_rect.translate(0, mCtx.mNodePadAttrs);
+    }
   }
 
   painter->restore();
 }
 
 void GraphNode::updateAll() {
-  QFont name_font;
-  QFont attrs_font;
-  if (isSelected()) {
-    name_font = mCtx.mNodeSelectedNameFont;
-    attrs_font = mCtx.mNodeSelectedAttrsFont;
-  } else {
-    name_font = mCtx.mNodeNormalNameFont;
-    attrs_font = mCtx.mNodeNormalAttrsFont;
-  }
-
+  QFont name_font(mCtx.mNodeFont);
+  name_font.setBold(true);
   QFontMetrics name_fm(name_font);
+  QFont attrs_font(mCtx.mNodeFont);
   QFontMetrics attr_fm(attrs_font);
   QRectF name_rect = name_fm.boundingRect(mName);
   QString max_len_attr;
@@ -108,5 +112,17 @@ void GraphNode::updateAll() {
   mFirstAttrRect.setY(mCtx.mNodePadHT + name_rect.height() + mCtx.mNodePadNameAttrs);
   mFirstAttrRect.setWidth(attr_rect.width());
   mFirstAttrRect.setHeight(attr_rect.height());
+  update();
+}
+
+void GraphNode::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+  // qDebug() << "Enter hover";
+  mHovered = true;
+  update();
+}
+
+void GraphNode::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+  // qDebug() << "Leave hover";
+  mHovered = false;
   update();
 }

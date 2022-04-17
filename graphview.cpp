@@ -206,8 +206,14 @@ void GraphView::keyPressEvent(QKeyEvent *ev) {
   if (ev->key() == Qt::Key_Delete) {
     auto items = mScene->selectedItems();
     for (auto &i : items) {
-      mScene->removeItem(i);
-      delete i;
+      auto type = i->data(kItemDataKeyType).toInt();
+      if (type == kItemTypeNode) {
+        mScene->delNode(reinterpret_cast<GraphNode*>(i));
+      } else if (type == kItemTypeEdge) {
+        mScene->delEdge(reinterpret_cast<GraphEdge*>(i));
+      } else {
+        qCritical() << "Unknow value of kItemDataKeyType:" << type;
+      }
     }
     return;
   }

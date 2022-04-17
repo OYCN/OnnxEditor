@@ -105,6 +105,9 @@ inline bool intersection(const QLineF& l1, const QLineF& l2) {
 #endif
 
 void GraphEdge::updateAll() {
+  if (mFrom == nullptr || mTo == nullptr) {
+    return;
+  }
   // update start & stop pos
   QPointF fromPos = mFrom->pos();
   QRectF fromRect = mFrom->boundingRect();

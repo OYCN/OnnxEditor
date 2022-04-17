@@ -36,6 +36,8 @@ class GraphEdge : public QGraphicsItem {
 
   GraphNode* getFrom() const { return mFrom; }
   GraphNode* getTo() const { return mTo; }
+  void setFrom(GraphNode* node) { mFrom = node; }
+  void setTo(GraphNode* node) { mTo = node; }
 
  private:
   Context& mCtx;

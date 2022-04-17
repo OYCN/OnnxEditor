@@ -32,20 +32,20 @@ class GraphNode : public QGraphicsItem {
 
 public:
   QString getName() const { return mName; }
-  void setName(QString name, bool update = true) { 
-    mName = name;
-    if (update) updateAll();
-  }
+  void setName(QString name) { mName = name; }
 
   QMap<QString, QString> getAttrs() const { return mAttrs; }
   QString getAttr(QString key) const { return mAttrs.value(key); }
-  void setAttr(QString key, QString value, bool update = true) {
-    mAttrs[key] = value;
-    if (update) updateAll();
-  }
+  void setAttr(QString key, QString value) { mAttrs[key] = value; }
+
+protected:
+  void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
+  void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
 
  private:
   Context &mCtx;
+
+  bool mHovered = false;
 
   QString mName = "";
   QMap<QString, QString> mAttrs;
