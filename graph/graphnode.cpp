@@ -93,7 +93,7 @@ void GraphNode::updateAll() {
   auto h = name_rect.height();
   if (w < attr_rect.width()) w = attr_rect.width();
   if (attrs.size() > 0) {
-    h += attr_rect.height() + mCtx.mNodePadNameAttrs +
+    h += attr_rect.height() * attrs.size() + mCtx.mNodePadNameAttrs +
          mCtx.mNodePadAttrs * (attrs.size() - 1);
   }
   mAllRect.setX(0);
