@@ -63,6 +63,7 @@ bool MainWindow::applyByParser() {
   auto inputs = mParser.getInputs();
   for (auto i : inputs) {
     auto n = mScene->addNode("Input");
+    mScene->setNodeAttr(n, "name", i.c_str());
     // register this
     if (map.contains(i.c_str())) {
       QMessageBox::critical(this, "Error",
@@ -134,6 +135,7 @@ bool MainWindow::applyByParser() {
   auto outputs = mParser.getOutputs();
   for (auto o : outputs) {
     auto n = mScene->addNode(o.c_str());
+    mScene->setNodeAttr(n, "name", o.c_str());
     // find inputs
     if (!map.contains(o.c_str())) {
       QMessageBox::critical(this, "Error",

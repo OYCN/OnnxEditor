@@ -16,8 +16,10 @@
 
 #include <ogdf/layered/MedianHeuristic.h>
 #include <ogdf/layered/OptimalHierarchyLayout.h>
+#include <ogdf/layered/FastHierarchyLayout.h>
 #include <ogdf/layered/OptimalRanking.h>
 #include <ogdf/layered/SugiyamaLayout.h>
+// #include <ogdf/fileformats/GraphIO.h>
 
 namespace layout {
 
@@ -49,10 +51,16 @@ void OgdfLayout::layoutImpl() {
   layout.setCrossMin(new ogdf::MedianHeuristic);
   ogdf::OptimalHierarchyLayout* ohl = new ogdf::OptimalHierarchyLayout;
   ohl->layerDistance(30.0);
-  ohl->nodeDistance(25.0);
+  ohl->nodeDistance(30.0);
   ohl->weightBalancing(0.8);
   layout.setLayout(ohl);
+  // ogdf::FastHierarchyLayout* fhl = new ogdf::FastHierarchyLayout;
+  // fhl->layerDistance(30.0);
+  // fhl->nodeDistance(25.0);
+  // layout.setLayout(fhl);
   layout.call(graphAttr);
+
+  // ogdf::GraphIO::write(mGraph, "graph.gml", ogdf::GraphIO::writeGML);
 
   for (auto& node : mNodes) {
     auto handle = std::any_cast<ogdf::NodeElement*>(node.mHandle);
