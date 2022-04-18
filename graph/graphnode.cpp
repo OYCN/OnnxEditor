@@ -64,7 +64,7 @@ void GraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     QRectF this_attr_rect = mFirstAttrRect;
     for (const auto &str : mAttrsStr) {
       painter->drawText(this_attr_rect, Qt::AlignCenter, str);
-      this_attr_rect.translate(0, mCtx.mNodePadAttrs);
+      this_attr_rect.translate(0, mCtx.mNodePadAttrs + this_attr_rect.height());
     }
   }
 
