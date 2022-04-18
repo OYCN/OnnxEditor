@@ -188,12 +188,12 @@ void GraphView::mouseReleaseEvent(QMouseEvent *event) {
     } else {
       mAddNodeAction->setEnabled(false);
     }
-    if (nodeNum == 1) {
+    if (nodeNum == 1 && edgeNum == 0) {
       mAddNodeAttrAction->setEnabled(true);
     } else {
       mAddNodeAttrAction->setEnabled(false);
     }
-    if (nodeNum == 2) {
+    if (nodeNum == 2 && edgeNum == 0) {
       mAddEdgeAction->setEnabled(true);
     } else {
       mAddEdgeAction->setEnabled(false);
