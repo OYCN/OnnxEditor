@@ -96,6 +96,13 @@ bool MainWindow::applyByParser() {
   for (size_t i = 0; i < size; i++) {
     auto node = mParser.getNode(i);
     auto n = mScene->addNode(node.mType.c_str());
+    qDebug() << "Node: " << node.mName.c_str();
+    // for attrs
+    QList<QPair<QString, QString>> attrs = {{"name", node.mName.c_str()}};
+    for (const auto& attr : node.mAttrs) {
+      attrs.append({attr.first.c_str(), attr.second.c_str()});
+    }
+    mScene->setNodeAttrs(n, attrs);
     // find inputs
     for (auto o : node.mInputs) {
       if (!map.contains(o.c_str())) {

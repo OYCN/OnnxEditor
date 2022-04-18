@@ -83,9 +83,16 @@ void GraphScene::delEdge(GraphEdge* edge) {
 }
 
 void GraphScene::setNodeAttr(GraphNode* node, QString key, QString value) {
-  qDebug() << "add node attr," << node->getName() << ": " << key << "="
-           << value;
-  node->setAttr(key, value);
+  QList<QPair<QString, QString>> t = {{key, value}};
+  setNodeAttrs(node, t);
+}
+
+void GraphScene::setNodeAttrs(GraphNode* node, const QList<QPair<QString, QString>>& attrs) {
+  for (const auto& attr : attrs) {
+    qDebug() << "add node attr," << node->getName() << ": " << attr.first << "="
+           << attr.second;
+    node->setAttr(attr.first, attr.second);
+  }
   node->updateAll();
   Q_ASSERT(mNode2Edges.count(node) == 1);
   for (auto& e : mNode2Edges[node]) {
@@ -99,8 +106,9 @@ void GraphScene::layout() {
   std::map<GraphNode*, layout::Node_t*> node_map;
   std::vector<layout::Node_t*> nodes;
   for (const auto& node : mNodes) {
+    node->updateAll();
     auto rect = node->boundingRect();
-    // qDebug() << node->getName() << rect;
+    qDebug() << node->getAttr("name") << rect;
     auto n = le->addNode(rect.width(), rect.height());
     Q_ASSERT(node_map.count(node) == 0);
     node_map.insert(std::make_pair(node, n));

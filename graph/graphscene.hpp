@@ -35,6 +35,7 @@ class GraphScene : public QGraphicsScene {
   void delEdge(GraphEdge* edge);
 
   void setNodeAttr(GraphNode* node, QString key, QString value);
+  void setNodeAttrs(GraphNode* node, const QList<QPair<QString, QString>>& attrs);
 
   void layout();
 

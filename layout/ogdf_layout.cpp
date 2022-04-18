@@ -56,8 +56,8 @@ void OgdfLayout::layoutImpl() {
 
   for (auto& node : mNodes) {
     auto handle = std::any_cast<ogdf::NodeElement*>(node.mHandle);
-    node.mX = graphAttr.x(handle);
-    node.mY = graphAttr.y(handle);
+    node.mX = graphAttr.x(handle) - node.mW / 2;
+    node.mY = graphAttr.y(handle) - node.mH / 2;
     std::cout << "Layout x=" << node.mX << " y=" << node.mY << std::endl;
   }
 }

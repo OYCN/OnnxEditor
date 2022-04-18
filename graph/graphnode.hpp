@@ -36,7 +36,12 @@ class GraphNode : public QGraphicsItem {
 
   QMap<QString, QString> getAttrs() const { return mAttrs; }
   QString getAttr(QString key) const { return mAttrs.value(key); }
-  void setAttr(QString key, QString value) { mAttrs[key] = value; }
+  void setAttr(QString key, QString value) {
+    if (mAttrOrder.count(key) == 0) {
+      mAttrOrder.append(key);
+    }
+    mAttrs[key] = value;
+  }
 
  protected:
   void hoverEnterEvent(QGraphicsSceneHoverEvent *event) override;
@@ -48,6 +53,7 @@ class GraphNode : public QGraphicsItem {
   bool mHovered = false;
 
   QString mName = "";
+  QList<QString> mAttrOrder;
   QMap<QString, QString> mAttrs;
   QList<QString> mAttrsStr;
 

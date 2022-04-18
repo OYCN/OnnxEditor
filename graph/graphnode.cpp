@@ -79,9 +79,8 @@ void GraphNode::updateAll() {
   QFontMetrics attr_fm(attrs_font);
   QRectF name_rect = name_fm.boundingRect(mName);
   QString max_len_attr;
-  auto attrs = mAttrs.keys();
   mAttrsStr.clear();
-  for (const auto &k : attrs) {
+  for (const auto &k : mAttrOrder) {
     QString this_str = k + ": " + mAttrs[k];
     mAttrsStr.append(this_str);
     if (this_str.size() > max_len_attr.size()) {
@@ -92,9 +91,9 @@ void GraphNode::updateAll() {
   auto w = name_rect.width();
   auto h = name_rect.height();
   if (w < attr_rect.width()) w = attr_rect.width();
-  if (attrs.size() > 0) {
-    h += attr_rect.height() * attrs.size() + mCtx.mNodePadNameAttrs +
-         mCtx.mNodePadAttrs * (attrs.size() - 1);
+  if (mAttrOrder.size() > 0) {
+    h += attr_rect.height() * mAttrOrder.size() + mCtx.mNodePadNameAttrs +
+         mCtx.mNodePadAttrs * (mAttrOrder.size() - 1);
   }
   mAllRect.setX(0);
   mAllRect.setY(0);
